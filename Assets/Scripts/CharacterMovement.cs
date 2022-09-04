@@ -23,6 +23,9 @@ public class CharacterMovement : MonoBehaviour
     [Header("Input Settings")]
     public float inputOffset = 1;
     private int _tempFingerID = -1;
+    private Vector3 _prevPos = Vector3.zero;
+    private Vector3 _tempMousePos;
+    private Vector3 _tempWorldPos = Vector3.zero;
     public enum CharState
     {
         Idle,
@@ -36,7 +39,11 @@ public class CharacterMovement : MonoBehaviour
     { get => _inputValues.isPressed; }
     public bool IsReleased
     { get => _inputValues.isReleased; }
-
+    public Vector3 InputVal
+    {
+        get => _inputValues.inputPos;
+    }
+    
     private void Awake()
     {
         _mainCam = Camera.main;
@@ -55,10 +62,40 @@ public class CharacterMovement : MonoBehaviour
     }
     private void Update()
     {
-        GetInputs();
+        //GetInputs();
     }
     // Update is called once per frame
     private void FixedUpdate()
+    {
+        ControlState();
+    }
+
+    void ProcessInput(float velocityZ, float sideSpeed)
+    {
+        currentVelocityZ = velocityZ;
+        if (IsPressed)
+        {
+            currentVelocityZ = velocityZ * _slowedAmount;
+        }
+
+        var targetSideSpeed = sideSpeed * _inputValues.inputPos.x;
+        var currentVelocity = _rb.velocity;
+        currentVelocity.x = Mathf.Clamp(Mathf.MoveTowards(currentVelocity.x, targetSideSpeed, maxForce * Time.fixedDeltaTime), -maxVelocity, maxVelocity);
+        _targetPos = _rb.position + new Vector3(currentVelocity.x, 0, currentVelocityZ) * Time.deltaTime;
+        _targetPos = new Vector3(Mathf.Clamp(_targetPos.x, -maxPositionX, maxPositionX), _targetPos.y, _targetPos.z);
+
+    }
+
+
+    public struct InputValues
+    {
+        public bool isPressed;
+        public bool isReleased;
+        public Vector3 inputPos;
+        public Vector3 worldPos;
+    }
+
+    void ControlState()
     {
         if (charState == CharState.Started)
         {
@@ -84,86 +121,90 @@ public class CharacterMovement : MonoBehaviour
             _rb.MovePosition(_targetPos);
         }
     }
+    //void GetInputs()
+    //{
+    //    _inputValues.isReleased = false; //Always set isReleased false on running
+    //    if (Application.isEditor)
+    //    {
+    //        //_inputValues.isPressed = (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0)) ? true : false;
+    //        //_inputValues.isReleased = (Input.GetMouseButtonUp(0)) ? true : false;
+    //        if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
+    //        {
+    //            _inputValues.isPressed = true;
+    //            _tempMousePos = Input.mousePosition + new Vector3(0, 0, _mainCam.nearClipPlane + inputOffset);
+    //            _tempWorldPos = _mainCam.ScreenToWorldPoint(_tempMousePos);
+    //            if(Input.GetMouseButton(0))
+    //            {
+    //                _inputValues.inputPos = _tempWorldPos - _prevPos;
+    //            }
+    //            _prevPos = _tempWorldPos;
+    //            _inputValues.worldPos = _tempWorldPos;
+    //        }
+    //        else if (Input.GetMouseButtonUp(0))
+    //        {
+    //            _inputValues.isReleased = true;
+    //            _inputValues.inputPos = Vector3.zero;
+    //        }
 
-    void ProcessInput(float velocityZ, float sideSpeed)
-    {
-        currentVelocityZ = velocityZ;
-        if (IsPressed)
-        {
-            currentVelocityZ = velocityZ * _slowedAmount;
-        }
+    //        Debug.Log(_inputValues.inputPos);
+    //    }
+    //    else
+    //    {
+    //        if (Input.touchCount > 0)
+    //        {
+    //            if (_tempFingerID == -1)
+    //            {
+    //                foreach (Touch inputs in Input.touches)
+    //                {
+    //                    if (inputs.phase == TouchPhase.Began)
+    //                    {
+    //                        _tempFingerID = inputs.fingerId;
+    //                        _inputValues.isPressed = true;
+    //                        _inputValues.isReleased = false;
+    //                        _tempMousePos = new Vector3(inputs.position.x, inputs.position.y, 0) + new Vector3(0, 0, _mainCam.nearClipPlane + inputOffset);
+    //                        _tempWorldPos = _mainCam.ScreenToWorldPoint(_tempMousePos);
+    //                        _prevPos = _tempWorldPos;
+    //                        _inputValues.worldPos = _tempWorldPos;
 
-        var targetSideSpeed = sideSpeed * _inputValues.inputPos.x;
-        var currentVelocity = _rb.velocity;
-        currentVelocity.x = Mathf.Clamp(Mathf.MoveTowards(currentVelocity.x, targetSideSpeed, maxForce * Time.fixedDeltaTime), -maxVelocity, maxVelocity);
-        _targetPos = _rb.position + new Vector3(currentVelocity.x, 0, currentVelocityZ) * Time.deltaTime;
-        _targetPos = new Vector3(Mathf.Clamp(_targetPos.x, -maxPositionX, maxPositionX), _targetPos.y, _targetPos.z);
-
-
-
-    }
-
-
-    public struct InputValues
-    {
-        public bool isPressed;
-        public bool isReleased;
-        public Vector3 inputPos;
-
-    }
-
-    void GetInputs()
-    {
-        if (Application.isEditor)
-        {
-            _inputValues.isPressed = (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0)) ? true : false;
-            _inputValues.isReleased = (Input.GetMouseButtonUp(0)) ? true : false;
-            var tempPos = Input.mousePosition + new Vector3(0, 0, _mainCam.nearClipPlane + inputOffset);
-            _inputValues.inputPos = _mainCam.ScreenToWorldPoint(tempPos);
-        }
-        else
-        {
-            if (Input.touchCount > 0)
-            {
-                if (_tempFingerID == -1)
-                {
-                    foreach (Touch inputs in Input.touches)
-                    {
-                        if (inputs.phase == TouchPhase.Began)
-                        {
-                            _tempFingerID = inputs.fingerId;
-                            _inputValues.isPressed = true;
-                            _inputValues.isReleased = false;
-                            var tempPos = new Vector3(inputs.position.x, inputs.position.y, 0) + new Vector3(0, 0, _mainCam.nearClipPlane + inputOffset);
-                            _inputValues.inputPos = _mainCam.ScreenToWorldPoint(tempPos);
-                        }
-                    }
-                }
-                else
-                {
+    //                    }
+    //                }
+    //            }
+    //            else
+    //            {
 
 
-                    foreach (Touch inputs in Input.touches)
-                    {
-                        if (inputs.fingerId == _tempFingerID)
-                        {
-                            _inputValues.isPressed = (inputs.phase == TouchPhase.Began || inputs.phase == TouchPhase.Moved || inputs.phase == TouchPhase.Stationary) ? true : false;
-                            _inputValues.isReleased = (inputs.phase == TouchPhase.Ended || inputs.phase == TouchPhase.Canceled) ? true : false;
-                            var tempPos = new Vector3(inputs.position.x, inputs.position.y, 0) + new Vector3(0, 0, _mainCam.nearClipPlane + inputOffset);
-                            _inputValues.inputPos = _mainCam.ScreenToWorldPoint(tempPos);
-                            if (_inputValues.isReleased)
-                            {
-                                _tempFingerID = -1;
-                            }
-                            return;
-                        }
+    //                foreach (Touch inputs in Input.touches)
+    //                {
+    //                    if (inputs.fingerId == _tempFingerID)
+    //                    {
+    //                        if(inputs.phase == TouchPhase.Moved || inputs.phase ==TouchPhase.Stationary)
+    //                        {
+    //                            _inputValues.isPressed = true;
+    //                            _tempMousePos = Input.mousePosition + new Vector3(0, 0, _mainCam.nearClipPlane + inputOffset);
+    //                            _tempWorldPos = _mainCam.ScreenToWorldPoint(_tempMousePos);
+    //                            if(inputs.phase == TouchPhase.Moved)
+    //                            {
+    //                                _inputValues.inputPos = _tempWorldPos - _prevPos;
+    //                            }
+    //                            _prevPos = _tempWorldPos;
+    //                            _inputValues.worldPos = _tempWorldPos;
 
-                    }
-                    _inputValues.isPressed = false;
-                    _inputValues.isReleased = true;
-                    _tempFingerID = -1;
-                }
-            }
-        }
-    }
+    //                        }
+    //                        else if (inputs.phase == TouchPhase.Ended || inputs.phase == TouchPhase.Canceled)
+    //                        {
+    //                            _inputValues.isReleased = true;
+    //                            _inputValues.inputPos = Vector3.zero;
+    //                            _tempFingerID = -1;
+    //                        }
+    //                        return;
+    //                    }
+
+    //                }
+    //                _inputValues.isPressed = false;
+    //                _inputValues.isReleased = true;
+    //                _tempFingerID = -1;
+    //            }
+    //        }
+    //    }
+    //}
 }
