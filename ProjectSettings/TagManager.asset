@@ -5,16 +5,19 @@ TagManager:
   serializedVersion: 2
   tags:
   - GameManager
+  - WaxBall
+  - Hair
+  - WaxLayer
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - WaxLayer
   - Water
   - UI
-  - 
-  - 
-  - 
+  - MaskableObj
+  - RenderingArea
+  - InputLayer
   - 
   - 
   - 
