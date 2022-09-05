@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class StickRotation : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private float _rotDegree;
+    private bool _isTouching = false;
     void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    void Rotate()
     {
-        
+
     }
 }

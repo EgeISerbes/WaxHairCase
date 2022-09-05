@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Hair : Interactable
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private System.Action onWaxCollission;
+    
 
-    // Update is called once per frame
-    void Update()
+   public  void Init(System.Action onCollision)
     {
-        
+        onWaxCollission = onCollision;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("WaxBall"))
+        {
+            onWaxCollission();
+
+        }
     }
 }

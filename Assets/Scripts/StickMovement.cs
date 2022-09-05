@@ -6,7 +6,10 @@ public class StickMovement : MonoBehaviour
 {
     private Rigidbody _rb;
     private Vector3 _targetPos;
-    private InputManager _inputs;
+    [Header("Ray Settings")]
+    private Ray _tempRay;
+    private RaycastHit _hitInfo;
+    [SerializeField] private LayerMask _targetLayer;
     [Header("Character Settings")]
     public float velocityZ;
     [HideInInspector] public float currentVelocityZ;
@@ -32,13 +35,15 @@ public class StickMovement : MonoBehaviour
     private void Awake()
     {
         _rb = gameObject.GetComponent<Rigidbody>();
+
+
     }
     IEnumerator LateStart()
     {
         yield return new WaitForEndOfFrame();
         _targetPos = _rb.position;
     }
-    
+
     void FixedUpdate()
     {
         ControlState();
@@ -48,16 +53,21 @@ public class StickMovement : MonoBehaviour
         if (charState == CharState.Started)
         {
             ProcessInput();
-            _rb.MovePosition(_targetPos); 
+            _rb.MovePosition(_targetPos);
         }
-        
+
     }
 
-    void ProcessInput()
+     public void ProcessInput()
     {
-        if(_inputs.IsPressed)
+        //Debug.Log(_inputs.IsPressed);
+
+        _tempRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(_tempRay, out _hitInfo, Mathf.Infinity, _targetLayer))
         {
-            _targetPos = _inputs.WorldPos + _inputs.InputVal;
+            _targetPos = _hitInfo.point;
         }
+
     }
 }

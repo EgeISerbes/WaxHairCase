@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class Stick : MonoBehaviour
 {
-    
-    
 
+    private StickMovement _stickMovement;
+    [SerializeField] private WaxGenerator _waxGenerator;
     private void Awake()
     {
-        Init();
+        _stickMovement = GetComponent<StickMovement>();   
     }
+    public void StartStates()
+    {
+        _stickMovement.charState = StickMovement.CharState.Started;
+        _waxGenerator.waxState = WaxGenerator.WaxState.Started;
 
-    public void Init()
-    {
     }
-    // Update is called once per frame
-    void Update()
+    public void StopStates()
     {
-        
+        _stickMovement.charState = StickMovement.CharState.Idle;
+        _waxGenerator.waxState = WaxGenerator.WaxState.Idle;
     }
+    
 }

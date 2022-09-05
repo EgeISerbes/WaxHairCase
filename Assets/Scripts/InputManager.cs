@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
     {
         get => _inputValues.worldPos; 
     }
+    
     private void Awake()
     {
         _mainCam = Camera.main;
@@ -37,6 +38,7 @@ public class InputManager : MonoBehaviour
         public bool isReleased;
         public Vector3 inputPos;
         public Vector3 worldPos;
+        
     }
     void GetInputs()
     {
@@ -60,10 +62,11 @@ public class InputManager : MonoBehaviour
             else if (Input.GetMouseButtonUp(0))
             {
                 _inputValues.isReleased = true;
+                _inputValues.isPressed = false;
                 _inputValues.inputPos = Vector3.zero;
             }
 
-            Debug.Log(_inputValues.inputPos);
+            //Debug.Log(_inputValues.worldPos);
         }
         else
         {
@@ -108,6 +111,7 @@ public class InputManager : MonoBehaviour
                             else if (inputs.phase == TouchPhase.Ended || inputs.phase == TouchPhase.Canceled)
                             {
                                 _inputValues.isReleased = true;
+                                _inputValues.isPressed = false;
                                 _inputValues.inputPos = Vector3.zero;
                                 _tempFingerID = -1;
                             }
