@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private HairManager _hairManager;
+   [SerializeField] private ArmBehaviour _armBehaviour;
     private Stick _stickCharacter;
     [SerializeField] private float _waitSeconds;
     [SerializeField] private float _endSeconds;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
         if (isPlaying)
         {
             Time.timeScale = 1f;
+            _armBehaviour.Init();
             _stickCharacter.StartStates();
         }
         else
