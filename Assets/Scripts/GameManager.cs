@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private HairManager _hairManager;
     private Stick _stickCharacter;
+    [SerializeField] private float _waitSeconds;
+    [SerializeField] private float _endSeconds;
     [SerializeField] private UIManager _uiManager;
     private void Awake()
     {
@@ -18,19 +20,35 @@ public class GameManager : MonoBehaviour
 
     public void GameState(bool isPlaying)
     {
+        _hairManager.GameState(isPlaying);
         if (isPlaying)
         {
+            Time.timeScale = 1f;
             _stickCharacter.StartStates();
         }
         else
         {
+            Time.timeScale = 0f;
             _stickCharacter.StopStates();
         }
 
     }
     public void GameFinished()
     {
+        StartCoroutine(GameFinishRoutines());
+        
+    }
+    IEnumerator GameFinishRoutines()
+    {
+        yield return new WaitForSeconds(_waitSeconds);
         _stickCharacter.StopStates();
+        _stickCharacter.FinishMove();
+        StartCoroutine(GameEnd());
+    }
+    IEnumerator GameEnd()
+    {
+        yield return new WaitForSeconds(_endSeconds);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public class HairManager
     {
@@ -58,6 +76,16 @@ public class GameManager : MonoBehaviour
             if (count <= 0)
             {
                 onFinishgame();
+            }
+        }
+        public void GameState(bool hasStarted)
+        {
+            if (hasStarted)
+            {
+                foreach (Hair hair in _hairList)
+                {
+                    hair.State(hasStarted);
+                }
             }
         }
     }

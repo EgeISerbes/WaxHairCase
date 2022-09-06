@@ -20,7 +20,7 @@ public class WaxGenerator : MonoBehaviour
         Idle,
         Started
     };
-    [HideInInspector] public WaxState waxState = WaxState.Idle; 
+    [HideInInspector] public WaxState waxState = WaxState.Idle;
 
     private void Start()
     {
@@ -28,8 +28,8 @@ public class WaxGenerator : MonoBehaviour
     }
 
     void Update()
-    {   
-        if(waxState == WaxState.Started)
+    {
+        if (waxState == WaxState.Started)
         {
             ProcessWax();
         }
@@ -37,7 +37,7 @@ public class WaxGenerator : MonoBehaviour
 
     void Generate()
     {
-        var obj = Object.Instantiate(_wax_Shape_to_Spawn,_hitPoint,transform.rotation).GetComponent<WaxBallBehaviour>();
+        var obj = Object.Instantiate(_wax_Shape_to_Spawn, _hitPoint, transform.rotation).GetComponent<WaxBallBehaviour>();
         _waxBalls.Add(obj);
 
     }
@@ -55,14 +55,14 @@ public class WaxGenerator : MonoBehaviour
                     _hasWax = true;
                     Debug.Log("Dogru");
                 }
-                else if(hit.collider.gameObject.CompareTag("WaxLayer"))
+                else if (hit.collider.gameObject.CompareTag("WaxLayer"))
                 {
                     _hitPoint = hit.point;
                 }
             }
             if (_hitInfo.Length != 0 && !_hasWax)
             {
-                if(_inputs.InputVal !=Vector3.zero)
+                if (_inputs.InputVal != Vector3.zero)
                 {
                     Generate();
                 }
@@ -71,7 +71,7 @@ public class WaxGenerator : MonoBehaviour
 
                 //    Generate();
                 //}
-                
+
             }
             _tempPos = _inputs.WorldPos;
             _hasWax = false;

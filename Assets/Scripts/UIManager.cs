@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _playButton;
     [SerializeField] private GameObject _pauseMenu;
     [SerializeField] private GameObject _pauseButton;
-    [SerializeField] private float _waitSeconds; 
+    [SerializeField] private float _waitSeconds;
     public void Init(System.Action<bool> GameStarted)
     {
         _onGameStart = GameStarted;
@@ -25,12 +25,14 @@ public class UIManager : MonoBehaviour
     public void GamePaused()
     {
         _pauseButton.SetActive(false);
+        _pauseMenu.SetActive(true);
         _onGameStart(false);
     }
 
     public void GameResumed()
     {
-        _pauseButton.SetActive(false);
+        _pauseButton.SetActive(true);
+        _pauseMenu.SetActive(false);
         _onGameStart(true);
     }
     public void GameRestarted()
