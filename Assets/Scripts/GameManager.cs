@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
         _hairManager.FindList();
         _stickCharacter = Object.FindObjectOfType<Stick>();
         _uiManager.Init(GameState);
-        sceneCount = SceneManager.sceneCount;
+        sceneCount = SceneManager.sceneCountInBuildSettings;
     }
 
 
