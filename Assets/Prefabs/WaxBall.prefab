@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3065579868310851435}
   - component: {fileID: 3065579868310851432}
   - component: {fileID: 7974767477845055982}
+  - component: {fileID: -6319611903127247665}
   m_Layer: 6
   m_Name: WaxBall
   m_TagString: WaxBall
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3065579868310851433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 49.04601, y: 36.242756, z: 44.81723}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -108,5 +109,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d324a1decacf2e6409e3978a8793eee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _expandRatio: 3
-  _increase_Amount_by_Frame: 15
+  _expandRatio: 5
+  _increase_Amount_by_Frame: 10
+  _secondExpandAmount: 1.25
+--- !u!54 &-6319611903127247665
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3065579868310851433}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
