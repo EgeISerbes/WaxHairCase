@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3065579868310851435}
   - component: {fileID: 3065579868310851432}
   - component: {fileID: 7974767477845055982}
-  - component: {fileID: -6319611903127247665}
+  - component: {fileID: -1809704481526897281}
   m_Layer: 6
   m_Name: WaxBall
   m_TagString: WaxBall
@@ -112,7 +112,7 @@ MonoBehaviour:
   _expandRatio: 5
   _increase_Amount_by_Frame: 10
   _secondExpandAmount: 1.25
---- !u!54 &-6319611903127247665
+--- !u!54 &-1809704481526897281
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
