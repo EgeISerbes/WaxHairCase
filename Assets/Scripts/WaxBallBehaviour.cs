@@ -26,6 +26,7 @@ public class WaxBallBehaviour : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("WaxBall"))
         {
+            
             var waxball = collision.gameObject.GetComponent<WaxBallBehaviour>();
             waxball.SecondExpansion();
         }

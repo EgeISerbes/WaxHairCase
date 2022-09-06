@@ -53,7 +53,7 @@ public class WaxGenerator : MonoBehaviour
                 if (hit.collider.gameObject.CompareTag("WaxBall"))
                 {
                     _hasWax = true;
-                    Debug.Log("Dogru");
+                    
                 }
                 else if (hit.collider.gameObject.CompareTag("WaxLayer"))
                 {
