@@ -2658,7 +2658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3818457819794876935, guid: 6f4a4246566af87479e2b8f27a672227, type: 3}
       propertyPath: _approachRate
-      value: 0.2
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f4a4246566af87479e2b8f27a672227, type: 3}
@@ -5208,6 +5208,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 254933591}
+    - target: {fileID: 5999606135086215929, guid: 298af11b6ccf36e4187723f2eef939e2, type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5999606135086215934, guid: 298af11b6ccf36e4187723f2eef939e2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
