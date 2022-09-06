@@ -10,12 +10,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float _waitSeconds;
     [SerializeField] private float _endSeconds;
     [SerializeField] private UIManager _uiManager;
+    private int sceneCount;
     private void Awake()
     {
         _hairManager = new HairManager(GameFinished);
         _hairManager.FindList();
         _stickCharacter = Object.FindObjectOfType<Stick>();
         _uiManager.Init(GameState);
+        sceneCount = SceneManager.sceneCount;
     }
 
 
@@ -50,7 +52,15 @@ public class GameManager : MonoBehaviour
     IEnumerator GameEnd()
     {
         yield return new WaitForSeconds(_endSeconds);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        var buildIndex = SceneManager.GetActiveScene().buildIndex;
+        if(buildIndex+1==sceneCount)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            SceneManager.LoadScene(buildIndex + 1);
+        }
     }
     public class HairManager
     {
